@@ -13,7 +13,7 @@ const App = () => {
   );
 
   useEffect(() => {
-    getPosts()
+    getPosts();
     getFirst();
   }, [ getPosts, getPosts]);
 
@@ -57,9 +57,9 @@ const App = () => {
       {isLoadingPosts && <div>Posts Loading ...</div>}
       {posts?.map((e) => (
         <div key={e.id} style={postsStyle}>
-          <p>{e.email}</p>
-          <p>{e.gender}</p>
-          <p>{e.phone}</p>
+          <p>{e.body}</p>
+          <p>{e.title}</p>
+          <p>{e.userId}</p>
         </div>
       ))}
       {/* {isLoadingFirst && <div>First Loading...</div>} */}
