@@ -1,88 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { map } from "rxjs/operators";
-import ApiService from "./services/api.service";
+import useServiceGet from "./hooks/hook.service.GET";
+import useServicePost from "./hooks/hook.service.POST";
 
 const App = () => {
-  const [posts, setPosts] = useState([]);
-  const [postvogh, setPostvogh] = useState(null);
-  const [first, setFirst] = useState({});
+  const [postData, setPostData] = useState(null);
+  // const [isLoadingPosts, posts, getPosts] = useServiceGet("api");
+  const [isLoadingPosts, posts, getPosts] = useServiceGet("posts");
+  const [isLoadingFirst, first, getFirst] = useServiceGet("posts/1");
+  const [isLoadingAdd, addResponse, addPost] = useServicePost(
+    "posts",
+    postData
+  );
 
-  const addPost = (event) => {
+  useEffect(() => {
+    getPosts()
+    getFirst();
+  }, [ getPosts, getPosts]);
+
+  useEffect(() => {
+    console.log(posts, "posts");
+    // console.log(first, "first");
+    // console.log(addResponse, "addResponse");
+  }, [posts]);
+
+  const addNewPost = (event) => {
     event.preventDefault();
     const postvogh = {
       body: "body",
       title: "title",
       userId: 8,
     };
-
-    new ApiService("/posts", postvogh).post().subscribe(() => {
-      setPostvogh([postvogh]);
-    });
+    setPostData(postvogh);
+    addPost();
   };
-  useEffect(() => {
-    console.log(posts, "posts");
-    console.log(first, "first");
-    console.log(postvogh, "postvogh");
-  }, [posts, first, postvogh]);
-
-  useEffect(() => {
-    const subscription = new ApiService("/posts")
-      .get()
-      .pipe(
-        map((res) => {
-          if (res) {
-            return res.slice(0, 5);
-          } else {
-            return [];  
-          }
-        })
-      )
-      .subscribe((posts) => {
-        setPosts(posts);
-      });
-
-    const first = new ApiService("/posts/1")
-      .get()
-      .pipe(
-        map((res) => {
-          if (res) {
-            return res;
-          } else {
-            return [];
-          }
-        })
-      )
-      .subscribe((first) => {
-        setFirst(first);
-      });
-    return () => {
-      subscription.unsubscribe();
-      first.unsubscribe();
-    };
-  }, []);
 
   return (
     <>
-      <button style={buttonStyle} onClick={addPost}>
+      <button style={buttonStyle} disabled={isLoadingAdd} onClick={addNewPost}>
         Add Post
       </button>
+      {isLoadingAdd && <div>Sending ...</div>}
+      {addResponse && (
+        <div style={sendStyle}>
+          <h1>Post sended</h1>
+        </div>
+      )}
+
+      {first && (
+        <div style={firtStyle}>
+          <p>{first.body}</p>
+          <p>{first.title}</p>
+          <p>{first.userId}</p>
+        </div>
+      )}
+
+      {isLoadingPosts && <div>Posts Loading ...</div>}
       {posts?.map((e) => (
         <div key={e.id} style={postsStyle}>
-          <p>{e.body}</p>
-          <p>{e.title}</p>
-          <p>{e.userId}</p>
+          <p>{e.email}</p>
+          <p>{e.gender}</p>
+          <p>{e.phone}</p>
         </div>
       ))}
-      <div style={firtStyle}>
-        <p>{first?.body}</p>
-        <p>{first?.title}</p>
-        <p>{first?.userId}</p>
-      </div>
-      <div style={postvoghStyle}>
-        <p>{postvogh && postvogh[0].body}</p>
-        <p>{postvogh && postvogh[0].title}</p>
-        <p>{postvogh && postvogh[0].userId}</p>
-      </div>
+      {/* {isLoadingFirst && <div>First Loading...</div>} */}
     </>
   );
 };
@@ -96,14 +76,13 @@ const firtStyle = {
   border: "1px solid grey",
   padding: ".4rem 2rem",
   margin: "1.5rem 3rem",
-  background: 'blue'
+  background: "blue",
 };
-
-const postvoghStyle = {
+const sendStyle = {
   border: "1px solid grey",
   padding: ".4rem 2rem",
   margin: "1.5rem 3rem",
-  background: 'green'
+  background: "green",
 };
 
 const buttonStyle = {
