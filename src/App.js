@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     getPosts();
     getFirst();
-  }, [ getPosts, getPosts]);
+  }, [ getPosts, getFirst]);
 
   useEffect(() => {
     console.log(posts, "posts");
@@ -46,8 +46,9 @@ const App = () => {
         </div>
       )}
 
+      {isLoadingFirst && <div>First Loading ...</div>}
       {first && (
-        <div style={firtStyle}>
+        <div style={firstStyle}>
           <p>{first.body}</p>
           <p>{first.title}</p>
           <p>{first.userId}</p>
@@ -62,7 +63,6 @@ const App = () => {
           <p>{e.userId}</p>
         </div>
       ))}
-      {/* {isLoadingFirst && <div>First Loading...</div>} */}
     </>
   );
 };
@@ -72,7 +72,7 @@ const postsStyle = {
   padding: ".4rem 2rem",
   margin: "1.5rem 3rem",
 };
-const firtStyle = {
+const firstStyle = {
   border: "1px solid grey",
   padding: ".4rem 2rem",
   margin: "1.5rem 3rem",
