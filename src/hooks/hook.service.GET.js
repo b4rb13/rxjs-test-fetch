@@ -1,17 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
+import ApiService from "../services/api.service";
 import { map } from "rxjs/operators";
 import { state } from "../state/state";
-import ApiService from "../services/api.service";
 
-export default (path='') => {
+
+export default (path='', query = '', mutator = data => data) => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
+
   useEffect(() => {
     if (!isLoading) {
       return;
     }
     setIsLoading(true);
-    const subscription = new ApiService(path)
+    const subscription = new ApiService(`${path}/${query}`)
       .get()
       .pipe(
         map((res) => {
@@ -20,24 +22,25 @@ export default (path='') => {
           } else {
             return [];
           }
-        })
+        }),
+        map(mutator)
       )
       .subscribe((res) => {
         setResponse(res);
         setIsLoading(false);
         // setGlobalState({...globalState, [path.split('/').join('')]: res});
-        console.log(res, '>>>');
-        state[path] = res
+        state[`${path}${query}`] = res
+
       });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [isLoading, path]);
+  }, [isLoading, path, query]);
 
   const get = useCallback(() => {
     setIsLoading(true);
   }, []);
 
-  return [isLoading, response, get, state];
+  return [isLoading, response, get];
 };

@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import Comp from "./compon";
 import useServiceGet from "./hooks/hook.service.GET";
 import useServicePost from "./hooks/hook.service.POST";
+import {state} from './state/state'
 
 const App = () => {
   const [postData, setPostData] = useState(null);
   // const [isLoadingPosts, posts, getPosts] = useServiceGet("api");
-  const [isLoadingPosts, posts, getPosts, stateGlobal] = useServiceGet("posts");
-  const [isLoadingFirst, first, getFirst] = useServiceGet("posts/1");
+  const mutator = data => data.slice(0, 5)
+  const [isLoadingPosts, posts, getPosts] = useServiceGet("posts", '', mutator);
+  const [isLoadingFirst, first, getFirst] = useServiceGet("posts" , '1');
   const [isLoadingAdd, addResponse, addPost] = useServicePost(
-    "posts",
+    "posts", '',
     postData
   );
   const [show, setShow] = useState(false);
@@ -19,11 +21,6 @@ const App = () => {
     getFirst();
   }, [ getPosts, getFirst]);
 
-  useEffect(() => {
-    console.log(posts, "posts");
-    // console.log(first, "first");
-    // console.log(addResponse, "addResponse");
-  }, [posts]);
 
   const addNewPost = (event) => {
     event.preventDefault();
@@ -38,8 +35,8 @@ const App = () => {
 
   return (
     <>
-      <button onClick={()=> console.log(stateGlobal, '>>> state')}>
-        click
+      <button style={loggerStyle} onClick={()=> console.log(state)}>
+        State Logger
       </button>
       <button style={buttonStyle} disabled={isLoadingAdd} onClick={addNewPost}>
         Add Post
@@ -71,6 +68,8 @@ const App = () => {
           <p>{e.userId}</p>
         </div>
       ))}
+
+
     </>
   );
 };
@@ -94,6 +93,17 @@ const sendStyle = {
 };
 
 const buttonStyle = {
+  background: "darkseagreen",
+  border: "none",
+  fontSize: "22px",
+  cursor: "pointer",
+  padding: "8px 15px",
+  borderRadius: "2px",
+};
+const loggerStyle = {
+  position: "absolute",
+  right: "5px",
+  top: "5px",
   background: "darkseagreen",
   border: "none",
   fontSize: "22px",
