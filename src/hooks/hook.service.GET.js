@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { map } from "rxjs/operators";
+import { state } from "../state/state";
 import ApiService from "../services/api.service";
 
-export default (path) => {
+export default (path='') => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
-
   useEffect(() => {
     if (!isLoading) {
       return;
@@ -22,9 +22,12 @@ export default (path) => {
           }
         })
       )
-      .subscribe((response) => {
-        setResponse(response);
+      .subscribe((res) => {
+        setResponse(res);
         setIsLoading(false);
+        // setGlobalState({...globalState, [path.split('/').join('')]: res});
+        console.log(res, '>>>');
+        state[path] = res
       });
 
     return () => {
@@ -36,5 +39,5 @@ export default (path) => {
     setIsLoading(true);
   }, []);
 
-  return [isLoading, response, get];
+  return [isLoading, response, get, state];
 };

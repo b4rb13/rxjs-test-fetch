@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
+import Comp from "./compon";
 import useServiceGet from "./hooks/hook.service.GET";
 import useServicePost from "./hooks/hook.service.POST";
 
 const App = () => {
   const [postData, setPostData] = useState(null);
   // const [isLoadingPosts, posts, getPosts] = useServiceGet("api");
-  const [isLoadingPosts, posts, getPosts] = useServiceGet("posts");
+  const [isLoadingPosts, posts, getPosts, stateGlobal] = useServiceGet("posts");
   const [isLoadingFirst, first, getFirst] = useServiceGet("posts/1");
   const [isLoadingAdd, addResponse, addPost] = useServicePost(
     "posts",
     postData
   );
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     getPosts();
@@ -36,13 +38,19 @@ const App = () => {
 
   return (
     <>
+      <button onClick={()=> console.log(stateGlobal, '>>> state')}>
+        click
+      </button>
       <button style={buttonStyle} disabled={isLoadingAdd} onClick={addNewPost}>
         Add Post
       </button>
+
+      {show ? <Comp /> : null}
       {isLoadingAdd && <div>Sending ...</div>}
       {addResponse && (
         <div style={sendStyle}>
           <h1>Post sended</h1>
+          <button onClick={() => setShow(true)}>show comp</button>
         </div>
       )}
 
