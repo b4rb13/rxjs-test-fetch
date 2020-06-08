@@ -8,7 +8,8 @@ class ApiService {
 
   get() {
     const headers = {
-      "Access-Control-Allow-Origin": "*",
+      // "Access-Control-Allow-Origin": "*",
+      // "Content-Type": "application/json; charset=UTF-8",
     };
     const newBase = new BaseRequestModel(this.route, "GET", headers);
     return newBase.request();
@@ -17,7 +18,7 @@ class ApiService {
   post() {
     const headers = {
       // 'Access-Control-Allow-Origin': '*',
-      "Content-Type": "application/json; charset=UTF-8",
+      // "Content-Type": "application/json; charset=UTF-8",
     };
     const newBase = new BaseRequestModel(
       this.route,

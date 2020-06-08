@@ -46,7 +46,7 @@ const App = () => {
 
       <button
         style={loggerStyle}
-        onClick={()=> console.log(state)}  //es buttony console loga anum state-y
+        onClick={()=> console.log(state)}  //!es buttony console loga anum state-y
       >
         State Logger
       </button>

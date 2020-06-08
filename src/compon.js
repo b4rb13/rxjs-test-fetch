@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {state} from "./state/state";
+import {getFromState} from "./state/state";
 import useServiceGet from "./hooks/hook.service.GET";
 
 const Comp = () => {
@@ -10,20 +10,23 @@ useEffect(() => {
   getSecond()
 }, [getSecond]);
 
+const posts4 = getFromState('posts')[4]
+const posts1 = getFromState('posts1')
+
 //! arajin u erkrord divi mej nkarum em APP componentum arats callov stacats datan
   return (
     <div>
         <div style={firstStyle}>
-          <p>{state.posts[4].body}</p>
-          <p>{state.posts[4].title}</p>
-          <p>{state.posts[4].userId}</p>
+          <p>{posts4.body}</p>
+          <p>{posts4.title}</p>
+          <p>{posts4.userId}</p>
         </div>
 
 
         <div style={post1Style}>
-          <p>{state.posts1.body}</p>
-          <p>{state.posts1.title}</p>
-          <p>{state.posts1.userId}</p>
+          <p>{posts1.body}</p>
+          <p>{posts1.title}</p>
+          <p>{posts1.userId}</p>
         </div>
       {isLoadingSecond && <div>Second Loading ...</div>}
       {second && (
