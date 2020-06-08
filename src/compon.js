@@ -3,16 +3,16 @@ import {state} from "./state/state";
 import useServiceGet from "./hooks/hook.service.GET";
 
 const Comp = () => {
-
+// ! call em anum "posts" endpointov u "2" queryiov
   const [isLoadingSecond, second, getSecond] = useServiceGet("posts" , '2');
 
 useEffect(() => {
   getSecond()
 }, [getSecond]);
+
+//! arajin u erkrord divi mej nkarum em APP componentum arats callov stacats datan
   return (
     <div>
-
-
         <div style={firstStyle}>
           <p>{state.posts[4].body}</p>
           <p>{state.posts[4].title}</p>

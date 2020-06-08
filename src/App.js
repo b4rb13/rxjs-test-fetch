@@ -6,15 +6,23 @@ import {state} from './state/state'
 
 const App = () => {
   const [postData, setPostData] = useState(null);
-  // const [isLoadingPosts, posts, getPosts] = useServiceGet("api");
-  const mutator = data => data.slice(0, 5)
+
+  const mutator = data => data.slice(0, 5); //! talis em get anogh Hookin vor transform ani ekats datan u im uzats dzevov qci state
+
+  // ! kanchum e hoky call em anum    "posts" endpointov
   const [isLoadingPosts, posts, getPosts] = useServiceGet("posts", '', mutator);
+
+  // ! kanchum e hoky call em anum    "posts" endpointov "1" queryov
   const [isLoadingFirst, first, getFirst] = useServiceGet("posts" , '1');
+
+  //! post em anum "posts enpointov" u ira areqn el em qcum state
   const [isLoadingAdd, addResponse, addPost] = useServicePost(
     "posts", '',
     postData
   );
-  const [show, setShow] = useState(false);
+
+
+  const [show, setShow] = useState(false);  // ! cuyca talis erkrord componenty POST aneluc heto
 
   useEffect(() => {
     getPosts();
@@ -35,7 +43,11 @@ const App = () => {
 
   return (
     <>
-      <button style={loggerStyle} onClick={()=> console.log(state)}>
+
+      <button
+        style={loggerStyle}
+        onClick={()=> console.log(state)}  //es buttony console loga anum state-y
+      >
         State Logger
       </button>
       <button style={buttonStyle} disabled={isLoadingAdd} onClick={addNewPost}>
